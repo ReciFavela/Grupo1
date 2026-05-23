@@ -54,7 +54,7 @@ Recifavela-Treino/
 ├── setup_bancos.py
 ├── requirements.txt
 ├── imag-test/
-├── .env
+├── logs/
 └── README.md
 ```
 
@@ -163,7 +163,7 @@ Isso cria:
 O worker processa imagens de uma pasta, detecta objetos com YOLO, classifica com `best_model.pth` e grava nos três bancos.
 
 ```bash
-python ingestor.py --imagens data/PET --camera cam_01 --turno manha
+python worker/ingestor.py --imagens data/PET --camera cam_01 --turno manha
 ```
 
 Parâmetros:

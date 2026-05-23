@@ -3,3 +3,4 @@ imag-test/
 checkpoint.pth
 *.pt
 __pycache__/
+logs/
