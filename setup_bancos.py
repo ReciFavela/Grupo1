@@ -19,19 +19,19 @@ import sys
 # Configurações (mesmas do docker-compose)
 # ─────────────────────────────────────────
 
-MONGO_URI = "mongodb://admin:recifavela123@localhost:27017/"
-MONGO_DB  = "recifavela"
-MONGO_COL = "frames"
+MONGO_URI = "MONGODB_URI"
+MONGO_DB  = "MONGO_DB"
+MONGO_COL = "MONGO_COL"
 
-INFLUX_URL   = "http://localhost:8086"
-INFLUX_TOKEN = "recifavela-super-secret-token"
-INFLUX_ORG   = "recifavela"
-INFLUX_BUCKET = "deteccoes"
+INFLUX_URL   = "INFLUX_URL"
+INFLUX_TOKEN = "INFLUX_TOKEN"
+INFLUX_ORG   = "INFLUX_ORG"
+INFLUX_BUCKET = "INFLUX_BUCKET"
 
-MINIO_ENDPOINT  = "localhost:9000"
-MINIO_ACCESS    = "admin"
-MINIO_SECRET    = "recifavela123"
-MINIO_BUCKET    = "frames"
+MINIO_ENDPOINT  = "MINIO_ENDPOINT"
+MINIO_ACCESS    = "MINIO_ACCESS"
+MINIO_SECRET    = "MINIO_SECRET"
+MINIO_BUCKET    = "MINIO_BUCKET"
 
 
 # ─────────────────────────────────────────
