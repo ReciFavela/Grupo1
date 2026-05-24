@@ -1,0 +1,109 @@
+docker :
+  // vendo se docker compose esta instalado
+    version
+
+  // vendo se docker compose esta em funcionamento
+    info
+
+  // se docker compose stá funcionando, rodar o yml do docker
+    compose up -d
+
+  // Vendo o que esta presente
+    ps -a (containers)
+    volume ls (volumes)
+    images (imagens)
+
+  // deletando containers
+    compose down (mantem imagens e volumes)
+    compose down -v (deleta volumes tambem)
+    image prune -a (deleta imagens)
+    system prune -a --volumes (deleta tudo criado pelo yml)
+
+----------------------------------------
+Mongo:
+{
+  "camera": "cam_01",
+  "timestamp": "...",
+  "detections": [
+    {
+      "classe": "garrafa_pet",
+      "confidence": 0.91
+    }
+  ],
+  "image_path": "frames/frame1.jpg"
+}
+
+InfluxDB:
+classe=garrafa_pet quantidade=1
+plastico_total=42
+----------------------------------------
+
+Testando cada Serviço:
+
+ - MongoDB:
+    - docker exec -it mongodb mongosh
+
+ - InfluxDB
+    - abrir (http://localhost:8086):
+        -> criar:
+            - Organization: recifavela
+            - Bucket: yolo_metrics
+            - Token: (token)
+ - MinIO:
+    - abrir (http://localhost:9001)
+    - logar: (usuario e senha estão no yml)
+    - criar um bucket para os frames (bucket: frames)
+
+python -m worker.code (no diretorio principal)
+-------------------------------------------------
+Instalando dependecias do python:
+  // ver quais dependencias estão instaladas
+    - pip (ou) py -m pip
+      freeze
+
+  // se for usar ambiente virtual:
+    (criar dentro do worker)
+    - python -m venv .venv 
+    - .venv/Scripts/activate
+      : se o .ven..activate funcionar tem que aparecer um "(.venv)" no terminal a cada código e "which python" tem que apontar para o .venv, se isso não funcionar, tem que indicar a origem do .venv, digitando algo como ". .venv/Scripts/activate" no terminal
+
+ - pip (ou) py -m pip
+    install -r requirements.txt (checar se o terminal esta no ../worker)
+
+  // se estiver usando o .venv e o vscode não reconhecer os imports:
+    - Ctrl + shift + p
+    - Python: Select Interpreter
+    - Seleciona o .venv/Scripts/python.exe como interpretador
+    - fecha e reabre o vs code
+
+  // codigo de limpeza para retirar as dependencias depois de testar o codigo localmente
+    - pip (ou) py -m pip
+      uninstall pymongo influxdb-client minio opencv-python ultralytics python-dotenv
+
+    - deactivate (sai do .venv)
+  // deletando .venv (virtual enviroment)
+    - rmdir /s /q .venv (ou) rm -rf .venv
+    - python -m venv .venv
+
+-------------------------------
+Iniciando:
+  - docker exec -it mongodb mongosh
+  - use admin
+  - db.auth("admin", "admin123")
+ou
+  - docker exec -it mongodb mongosh -u admin -p admin123 --authenticationDatabase admin
+
+então:
+  - use recifavela
+  - db.detections.find().pretty()
+
+vendo o worker trabalhando:
+  - db.detections.countDocuments()
+
+Ver bancos:
+  - show dbs
+
+Ver coleções:
+  - show dbs
+
+  
