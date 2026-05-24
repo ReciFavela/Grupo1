@@ -217,6 +217,8 @@ Fields      : contagem, confianca_media
 
 ## Imagens do ingestor.py para NOT_PET
 
+<img width="1920" height="1032" alt="image" src="https://github.com/user-attachments/assets/9e38cbb4-6827-438b-a269-87b3cacafcb5" />
+
 
 ## Projeto
 
