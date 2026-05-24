@@ -4,9 +4,11 @@ import os
 from torchvision import models, transforms
 from PIL import Image
 from collections import Counter
+from pathlib import Path
 
 # ================= CONFIG =================
-MODEL_PATH = "../models/best_model.pth"
+BASE_DIR = Path(__file__).resolve().parents[1]
+MODEL_PATH = BASE_DIR / "models" / "best_model.pth"
 
 # modelo binário
 classes = [
