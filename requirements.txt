@@ -1,0 +1,9 @@
+pymongo
+influxdb-client
+minio
+opencv-python
+ultralytics
+python-dotenv
+torch
+torchvision
+pillow
