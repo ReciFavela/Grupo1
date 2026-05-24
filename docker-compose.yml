@@ -1,16 +1,17 @@
 services:
 
   mongodb:
-    image: mongo:7
-    container_name: mongodb
-    restart: always
+    image: mongo:7 # instala a imagem oficial do mongo, versão 7 
+    container_name: mongodb # nome do conteinar
+    restart: always # qualquer erro do container ou pc -> reinicia
     ports:
-      - "27017:27017"
+      - "27017:27017" # porta que o mongoDB oficialmente escuta
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
+      # essas variaveis podem ser mudadas depois
+      MONGO_INITDB_ROOT_USERNAME: admin 
       MONGO_INITDB_ROOT_PASSWORD: admin123
     volumes:
-      - mongo_data:/data/db
+      - mongo_data:/data/db # onde os dados vão ser armazenados
 
   influxdb:
     image: influxdb:2.7
@@ -26,12 +27,12 @@ services:
     container_name: minio
     restart: always
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "9000:9000" # porta para o python
+      - "9001:9001" # porta para a UI
     environment:
       MINIO_ROOT_USER: admin
       MINIO_ROOT_PASSWORD: password123
-    command: server /data --console-address ":9001"
+    command: server /data --console-address ":9001" # iniciar o servidor MinIO
     volumes:
       - minio_data:/data
 
