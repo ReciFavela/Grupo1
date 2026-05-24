@@ -1,3 +1,5 @@
+.env
+temp/
 data/
 imag-test/
 checkpoint.pth
