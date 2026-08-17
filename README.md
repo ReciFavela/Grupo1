@@ -214,6 +214,15 @@ Fields      : contagem, confianca_media
 <img width="1920" height="1032" alt="Captura de tela 2026-04-26 040404" src="https://github.com/user-attachments/assets/0127eaad-50f8-41ff-9744-5296e31332e5" />
 <img width="1920" height="1032" alt="Captura de tela 2026-04-26 040327" src="https://github.com/user-attachments/assets/a7b3d936-7a3b-4c00-bb65-d9cdd4047626" />
 
+## Imagens do ingestor.py para PET
+
+<img width="1920" height="1032" alt="image" src="https://github.com/user-attachments/assets/a1cab43e-7e5f-4af5-8925-d2a60f90122e" />
+
+## Imagens do ingestor.py para NOT_PET
+
+<img width="1920" height="1032" alt="image" src="https://github.com/user-attachments/assets/9e38cbb4-6827-438b-a269-87b3cacafcb5" />
+
+
 ## Projeto
 
 Projeto desenvolvido no contexto do **Recifavela**, Grupo 1.
