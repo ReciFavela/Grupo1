@@ -38,6 +38,7 @@ Além do dataset base, o projeto inclui curadoria e complementação manual de i
 
 ```
 Recifavela-Treino/
+├── config.py
 ├── data/
 │   ├── PET/
 │   └── NOT_PET/
@@ -53,6 +54,7 @@ Recifavela-Treino/
 ├── docker-compose.yml
 ├── setup_bancos.py
 ├── requirements.txt
+├── .env.example
 ├── imag-test/
 ├── logs/
 └── README.md
@@ -150,6 +152,7 @@ Execute uma vez antes de rodar o worker:
 
 ```bash
 pip install -r requirements.txt
+cp .env.example .env   # opcional — valores padrão já funcionam em dev local
 python setup_bancos.py
 ```
 

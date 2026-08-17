@@ -1,9 +1,16 @@
 import os
+import sys
 import multiprocessing
+from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT_DIR))
+
+import config
 import torch
 import torch.nn as nn
 from torchvision import datasets, transforms, models
-from torch.utils.data import DataLoader, random_split
+from torch.utils.data import DataLoader, WeightedRandomSampler
 from tqdm import tqdm
 from sklearn.metrics import (
     accuracy_score,
@@ -12,6 +19,7 @@ from sklearn.metrics import (
     f1_score,
     confusion_matrix
 )
+from collections import Counter
 
 def get_auto_config():
     cfg = {}
@@ -52,6 +60,35 @@ def get_auto_config():
     return cfg
 
 
+def build_class_weights(train_dataset, device):
+    labels = [label for _, label in train_dataset.samples]
+    counts = Counter(labels)
+    num_classes = len(train_dataset.classes)
+
+    weights = torch.tensor(
+        [1.0 / counts[i] for i in range(num_classes)],
+        dtype=torch.float32,
+    )
+    weights = weights / weights.sum() * num_classes
+
+    print("Pesos por classe:", dict(zip(train_dataset.classes, weights.tolist())))
+    return weights.to(device)
+
+
+def build_train_sampler(train_dataset):
+    labels = [label for _, label in train_dataset.samples]
+    counts = Counter(labels)
+    sample_weights = torch.tensor(
+        [1.0 / counts[label] for label in labels],
+        dtype=torch.float32,
+    )
+    return WeightedRandomSampler(
+        weights=sample_weights,
+        num_samples=len(sample_weights),
+        replacement=True,
+    )
+
+
 def main():
 
     cfg = get_auto_config()
@@ -64,10 +101,10 @@ def main():
 
     LR = 3e-4
 
-    CHECKPOINT_PATH = "../models/checkpoint.pth"
-    BEST_MODEL_PATH = "../models/best_model.pth"
+    CHECKPOINT_PATH = config.CHECKPOINT_PATH
+    BEST_MODEL_PATH = config.BEST_MODEL_PATH
 
-    os.makedirs("../models", exist_ok=True)
+    config.MODELS_DIR.mkdir(exist_ok=True)
 
     # ================= TRANSFORMS =================
 
@@ -86,7 +123,7 @@ def main():
         )
     ])
 
-    test_transform = transforms.Compose([
+    val_transform = transforms.Compose([
         transforms.Lambda(
             lambda img: img.convert("RGB")
         ),
@@ -100,38 +137,47 @@ def main():
 
     # ================= DATA =================
 
-    dataset = datasets.ImageFolder(
-        "../data",
+    if not config.TRAIN_DIR.exists() or not config.VAL_DIR.exists():
+        print(
+            "Erro: data/train ou data/val não encontrados.\n"
+            "Execute primeiro: python scripts/split_data.py"
+        )
+        sys.exit(1)
+
+    train_dataset = datasets.ImageFolder(
+        str(config.TRAIN_DIR),
         transform=train_transform
     )
 
-    train_size = int(0.8*len(dataset))
-    test_size = len(dataset)-train_size
-
-    train_data,test_data = random_split(
-        dataset,
-        [train_size,test_size]
+    val_dataset = datasets.ImageFolder(
+        str(config.VAL_DIR),
+        transform=val_transform
     )
 
-    test_data.dataset.transform = test_transform
+    if train_dataset.classes != val_dataset.classes:
+        print("Erro: classes diferentes entre train e val.")
+        sys.exit(1)
+
+    train_sampler = build_train_sampler(train_dataset)
 
     train_loader = DataLoader(
-        train_data,
+        train_dataset,
         batch_size=BATCH_SIZE,
-        shuffle=True,
+        sampler=train_sampler,
         num_workers=NUM_WORKERS,
         pin_memory=PIN_MEMORY
     )
 
-    test_loader = DataLoader(
-        test_data,
+    val_loader = DataLoader(
+        val_dataset,
         batch_size=BATCH_SIZE,
         shuffle=False,
         num_workers=NUM_WORKERS,
         pin_memory=PIN_MEMORY
     )
 
-    print("Classes:", dataset.classes)
+    print("Classes:", train_dataset.classes)
+    print(f"Train: {len(train_dataset)} | Val: {len(val_dataset)}")
     print("Batch:", BATCH_SIZE)
 
     # ================= MODEL =================
@@ -145,12 +191,13 @@ def main():
 
     model.fc = nn.Linear(
         model.fc.in_features,
-        len(dataset.classes)
+        len(train_dataset.classes)
     ) 
 
     model=model.to(device)
 
-    criterion = nn.CrossEntropyLoss()
+    class_weights = build_class_weights(train_dataset, device)
+    criterion = nn.CrossEntropyLoss(weight=class_weights)
 
     optimizer = torch.optim.Adam(
         model.fc.parameters(),
@@ -165,7 +212,7 @@ def main():
     # ================= RESUME =================
 
     epoch=0
-    best_f1-0
+    best_f1=0
 
     if os.path.exists(CHECKPOINT_PATH):
         try:
@@ -279,7 +326,7 @@ def main():
 
         with torch.no_grad():
 
-            for x, y in test_loader:
+            for x, y in val_loader:
 
                 x = x.to(device)
                 y = y.to(device)
@@ -303,7 +350,7 @@ def main():
                 )
 
         avg_val_loss = (
-            val_loss / len(test_loader)
+            val_loss / len(val_loader)
         )
 
         # métricas

@@ -5,33 +5,30 @@ e o bucket de imagens no MinIO.
 Execute uma vez antes de rodar o worker.
 
 Uso:
-    pip install pymongo influxdb-client minio
+    pip install -r requirements.txt
     python setup_bancos.py
 """
 
 from pymongo import MongoClient, ASCENDING
 from influxdb_client import InfluxDBClient
-from influxdb_client.client.bucket_api import BucketsService
 from minio import Minio
 import sys
 
-# ─────────────────────────────────────────
-# Configurações (mesmas do docker-compose)
-# ─────────────────────────────────────────
+import config
 
-MONGO_URI = "MONGODB_URI"
-MONGO_DB  = "MONGO_DB"
-MONGO_COL = "MONGO_COL"
+MONGO_URI = config.MONGO_URI
+MONGO_DB = config.MONGO_DB
+MONGO_COL = config.MONGO_COL
 
-INFLUX_URL   = "INFLUX_URL"
-INFLUX_TOKEN = "INFLUX_TOKEN"
-INFLUX_ORG   = "INFLUX_ORG"
-INFLUX_BUCKET = "INFLUX_BUCKET"
+INFLUX_URL = config.INFLUX_URL
+INFLUX_TOKEN = config.INFLUX_TOKEN
+INFLUX_ORG = config.INFLUX_ORG
+INFLUX_BUCKET = config.INFLUX_BUCKET
 
-MINIO_ENDPOINT  = "MINIO_ENDPOINT"
-MINIO_ACCESS    = "MINIO_ACCESS"
-MINIO_SECRET    = "MINIO_SECRET"
-MINIO_BUCKET    = "MINIO_BUCKET"
+MINIO_ENDPOINT = config.MINIO_ENDPOINT
+MINIO_ACCESS = config.MINIO_ACCESS
+MINIO_SECRET = config.MINIO_SECRET
+MINIO_BUCKET = config.MINIO_BUCKET
 
 
 # ─────────────────────────────────────────

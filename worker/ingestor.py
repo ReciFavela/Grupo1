@@ -16,10 +16,16 @@ Uso:
 import argparse
 import uuid
 import os
+import sys
 import time
 import logging
 from datetime import datetime, timezone
 from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT_DIR))
+
+import config
 
 import torch
 import torchvision.transforms as transforms
@@ -38,25 +44,25 @@ from minio import Minio
 # Configurações
 # ─────────────────────────────────────────
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = config.ROOT_DIR
 
-MONGO_URI     = "mongodb://admin:recifavela123@localhost:27017/"
-MONGO_DB      = "recifavela"
-MONGO_COL     = "frames"
+MONGO_URI     = config.MONGO_URI
+MONGO_DB      = config.MONGO_DB
+MONGO_COL     = config.MONGO_COL
 
-INFLUX_URL    = "http://localhost:8086"
-INFLUX_TOKEN  = "recifavela-super-secret-token"
-INFLUX_ORG    = "recifavela"
-INFLUX_BUCKET = "deteccoes"
+INFLUX_URL    = config.INFLUX_URL
+INFLUX_TOKEN  = config.INFLUX_TOKEN
+INFLUX_ORG    = config.INFLUX_ORG
+INFLUX_BUCKET = config.INFLUX_BUCKET
 
-MINIO_ENDPOINT = "localhost:9000"
-MINIO_ACCESS   = "admin"
-MINIO_SECRET   = "recifavela123"
-MINIO_BUCKET   = "frames"
+MINIO_ENDPOINT = config.MINIO_ENDPOINT
+MINIO_ACCESS   = config.MINIO_ACCESS
+MINIO_SECRET   = config.MINIO_SECRET
+MINIO_BUCKET   = config.MINIO_BUCKET
 
-MODELO_PATH   = os.path.join(BASE_DIR, "models", "best_model.pth")
+MODELO_PATH   = str(config.BEST_MODEL_PATH)
 CONFIANCA_MIN = 0.5
-CLASSES       = ["NOT_PET", "PET"]
+CLASSES       = config.CLASSES
 BATCH_SIZE    = 16
 MAX_RETRIES   = 3
 
@@ -353,7 +359,8 @@ def main():
     logger.info("=" * 50)
 
     device        = detectar_dispositivo(logger)
-    yolo          = YOLO("yolov8n.pt")
+    yolo_path     = Path(__file__).resolve().parent / "yolov8n.pt"
+    yolo          = YOLO(str(yolo_path))
     if str(device) == "cuda":
         yolo.to("cuda")
 

@@ -1,7 +1,14 @@
+import sys
+from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT_DIR))
+
+import config
 import torch
 import torch.nn as nn
 from torchvision import datasets, transforms, models
-from torch.utils.data import random_split, DataLoader
+from torch.utils.data import DataLoader
 
 from sklearn.metrics import (
     classification_report,
@@ -11,9 +18,8 @@ from sklearn.metrics import (
 
 # ================= CONFIG =================
 
-MODEL_PATH = "../models/best_model.pth"
-DATA_DIR = "../data"
-
+MODEL_PATH = config.BEST_MODEL_PATH
+TEST_DIR = config.TEST_DIR
 BATCH_SIZE = 32
 
 device = torch.device(
@@ -23,47 +29,40 @@ device = torch.device(
 
 print("Device:", device)
 
+if not TEST_DIR.exists() or not any(TEST_DIR.iterdir()):
+    print(
+        f"Erro: {TEST_DIR} não encontrado ou vazio.\n"
+        "Execute primeiro: python scripts/split_data.py"
+    )
+    sys.exit(1)
+
 # ================= TRANSFORMS =================
 
 transform = transforms.Compose([
     transforms.Lambda(
         lambda img: img.convert("RGB")
     ),
-    transforms.Resize((224,224)),
+    transforms.Resize((224, 224)),
     transforms.ToTensor(),
     transforms.Normalize(
-        [0.485,0.456,0.406],
-        [0.229,0.224,0.225]
+        [0.485, 0.456, 0.406],
+        [0.229, 0.224, 0.225]
     )
 ])
 
 # ================= DATA =================
 
 dataset = datasets.ImageFolder(
-    DATA_DIR,
+    str(TEST_DIR),
     transform=transform
 )
 
 classes = dataset.classes
 print("Classes:", classes)
-
-# mesmo split do treino (fixo/reprodutível)
-generator = torch.Generator().manual_seed(42)
-
-train_size = int(
-    0.8 * len(dataset)
-)
-
-test_size = len(dataset) - train_size
-
-_, test_data = random_split(
-    dataset,
-    [train_size, test_size],
-    generator=generator
-)
+print(f"Imagens de teste: {len(dataset)}")
 
 loader = DataLoader(
-    test_data,
+    dataset,
     batch_size=BATCH_SIZE,
     shuffle=False
 )
@@ -96,14 +95,14 @@ all_labels = []
 
 with torch.no_grad():
 
-    for x,y in loader:
+    for x, y in loader:
 
-        x=x.to(device)
-        y=y.to(device)
+        x = x.to(device)
+        y = y.to(device)
 
-        out=model(x)
+        out = model(x)
 
-        preds=torch.argmax(
+        preds = torch.argmax(
             out,
             dim=1
         )
@@ -129,8 +128,9 @@ cm = confusion_matrix(
     all_preds
 )
 
+print("\n=== Conjunto de TESTE (nunca visto no treino) ===")
 print("\nAccuracy:")
-print(f"{acc*100:.2f}%")
+print(f"{acc * 100:.2f}%")
 
 print("\nConfusion Matrix:")
 print(cm)

@@ -1,3 +1,10 @@
+import sys
+from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT_DIR))
+
+import config
 import torch
 import torch.nn as nn
 import os
@@ -6,13 +13,8 @@ from PIL import Image
 from collections import Counter
 
 # ================= CONFIG =================
-MODEL_PATH = "../models/best_model.pth"
-
-# modelo binário
-classes = [
-    "NOT_PET",
-    "PET"
-]
+MODEL_PATH = config.BEST_MODEL_PATH
+classes = config.CLASSES
 
 # classes reais no dataset test
 pastas_teste = [
@@ -106,7 +108,7 @@ confusao = Counter()
 # ================= MAIN =================
 if __name__ == "__main__":
 
-    pasta_root = "../imag-test"
+    pasta_root = str(config.IMAG_TEST_DIR)
 
     extensoes_validas = (
         ".jpg",
