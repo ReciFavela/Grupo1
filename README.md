@@ -1,3 +1,6 @@
+## ▶ Quer só usar o programa?
+> Veja a pasta **[`triador_digital`](triador_digital/README.md)**: o **Triador Digital** é o programa com tela, botões grandes e passo a passo em linguagem simples. Ele mostra a esteira simulada, testa fotos, usa a câmera e conta o PET por turno. Não precisa de Docker.
+
 # Recifavela-Treino
 
 Treinamento de modelos de Inteligência Artificial para o projeto **Recifavela** — Grupo 1.
