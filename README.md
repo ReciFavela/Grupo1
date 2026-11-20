@@ -226,3 +226,5 @@ Fields      : contagem, confianca_media
 ## Projeto
 
 Projeto desenvolvido no contexto do **Recifavela**, Grupo 1.
+
+Repositório adicional com testes para melhoria do projeto: [https://github.com/Ilan-Ha/recifavela_testes](https://github.com/Ilan-Ha/recifavela_testes)
