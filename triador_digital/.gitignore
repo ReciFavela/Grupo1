@@ -1,0 +1,8 @@
+.venv_build/
+build/
+dist/
+relatorio/
+__pycache__/
+TriadorDigital.zip
+dados_taco/
+dados_taco.zip

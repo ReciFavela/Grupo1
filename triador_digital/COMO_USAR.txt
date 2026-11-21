@@ -1,0 +1,34 @@
+TRIADOR DIGITAL - RECIFAVELA
+============================
+
+PARA ABRIR
+  De dois cliques em  TriadorDigital.exe  (o icone fica nesta pasta).
+
+  Se aparecer uma tela azul "O Windows protegeu o computador":
+    1. clique em  "Mais informacoes"
+    2. clique em  "Executar assim mesmo"
+  Isso acontece porque o programa e novo. Ele nao faz mal ao computador.
+
+NA TELA INICIAL TEM 3 BOTOES
+  1  Ver a esteira   -> os objetos passam e o sistema separa sozinho
+  2  Testar uma foto -> escolha uma foto e veja se e PET
+  3  Usar a camera   -> mostre um objeto para a camera do computador
+
+  "Relatorio do dia" mostra quantos PET o sistema contou em cada turno.
+
+O QUE AS CORES QUEREM DIZER
+  VERDE    = e PET
+  CINZA    = nao e PET
+  AMARELO  = o sistema nao tem certeza -> uma pessoa precisa olhar
+
+QUER USAR SUAS PROPRIAS FOTOS NA ESTEIRA?
+  Coloque as fotos na pasta  imagens_esteira
+    - fotos de PET          -> dentro da pasta  pet
+    - fotos que nao sao PET -> dentro da pasta  nao_pet
+  Assim o programa tambem mostra se acertou ou errou.
+
+O RELATORIO
+  Fica na pasta  relatorio  (um arquivo por dia). Abre no Excel.
+
+ATENCAO: nao tire o TriadorDigital.exe de dentro desta pasta.
+         Ele precisa da pasta _internal que esta ao lado dele.

@@ -1,0 +1,5 @@
+# Bibliotecas que o Triador Digital usa
+onnxruntime>=1.17     # roda o modelo de IA (sem precisar do PyTorch)
+pillow>=10.0          # abre e mexe nas fotos
+numpy>=1.24           # contas com os pixels
+opencv-python>=4.8    # liga a webcam (modo "Usar a câmera")
